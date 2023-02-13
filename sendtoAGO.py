@@ -1,9 +1,17 @@
 import requests as r
 import json
-from datetime import date
+from datetime import datetime
+import pytz
 
 indexlist = [171759,164627,9738,109008,127637,108520,127637,130777,127613,109006,24105,54769]
-today = date.today()
+
+
+# time with timezone adjust
+now = datetime.utcnow()
+timezone = pytz.timezone("America/Chicago")
+now = timezone.localize(now)
+now.tzinfo
+print(now)
 
 for i in indexlist:
     url = 'https://api.purpleair.com/v1/sensors/' + str(i) + '/?api_key=900495AF-9392-11ED-B6F4-42010A800007&fields=latitude,longitude,pm10.0,name'
@@ -16,20 +24,22 @@ for i in indexlist:
     mylon = response_dict['sensor']['longitude']
     mypm10 = response_dict['sensor']['pm10.0']
     myname = response_dict['sensor']['name']
-    mydate = today.strftime("%Y-%m-%d")
+
+    today = str(now.strftime("%m/%d/%Y, %H:%M:%S"))
     params={"f":"pjson","token":"","rollbackOnFailure":"false","features":'{ \
         "geometry": {"x":'+ str(mylon) + ',"y":'+ str(mylat) + '}, "attributes" : { \
             "comments" : "' + myname + '", \
             "teacher" : "vs.content", \
             "lat" : '+ str(mylat) + ', \
             "lon": '+ str(mylon) + ', \
-            "sdate" : "' + mydate + '", \
+            "sdate" : "' + today + '", \
             "pm10" :  '+ str(mypm10) + ' }}'
         }
 
-    # print(params)
+    print(params)
     z = r.post(AGOurl, params=params)
     print(z.text)
     print('.')
 
-
+    
+    
