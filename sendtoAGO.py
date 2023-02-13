@@ -14,7 +14,7 @@ now.tzinfo
 print(now)
 
 for i in indexlist:
-    url = 'https://api.purpleair.com/v1/sensors/' + str(i) + '/?api_key=900495AF-9392-11ED-B6F4-42010A800007&fields=latitude,longitude,pm10.0,name'
+    url = 'https://api.purpleair.com/v1/sensors/' + str(i) + '/?api_key=xxxxx&fields=latitude,longitude,pm10.0,name'
     x = r.get(url)
     # print(x.text)
     response_dict = json.loads(x.text)
